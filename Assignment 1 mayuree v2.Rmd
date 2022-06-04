@@ -1,0 +1,65 @@
+---
+title: "Assignment 1"
+author: "Mayuree"
+date: '2022-06-04'
+output:
+  word_document: default
+  html_document:
+    theme:
+      bootswatch: cyborg
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r,echo=FALSE}
+#import libraries
+library(tidyverse)
+library(knitr)
+```
+
+
+#import csv data
+
+```{r echo=FALSE}
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+data <- read_csv(url)
+#exploring data
+str(data)
+```
+
+
+#filter age less than or equal to 65
+```{r echo=FALSE}
+youth <- filter(data, age <= 65)
+str(youth)
+
+```
+
+#Summarizing youth dataframe
+```{r echo=FALSE}
+summary(youth)
+```
+
+
+We have data about `r nrow(data)` individuals killed by guns . Only `r nrow(data) - nrow(youth)` are older than 65. The distribution of the remainder is shown below:
+
+```{r youth-dist ,echo=FALSE}
+#Gun deaths by age
+youth%>%
+  ggplot(aes(age))+
+  geom_freqpoly(binwidth=1)
+```
+
+
+```{r race-dist, echo=FALSE}
+#Gundeaths by race
+youth%>%
+  ggplot(aes(fct_infreq(race)%>% fct_rev())) +
+  geom_bar() + coord_flip()+
+  labs(x = "Victim race")
+```
+
+
